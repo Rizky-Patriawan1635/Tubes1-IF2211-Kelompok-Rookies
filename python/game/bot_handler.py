@@ -25,19 +25,20 @@ class BotHandler:
         else:
             raise Exception("Invalid move")
 
-
     def get_my_info(self, token: str) -> Bot:
         return self.api.bots_get(token)
 
-
-    def join(self, token: str, board_id: int ) -> bool:
+    def join(self, token: str, board_id: int) -> bool:
         return self.api.bots_join(token, board_id)
 
     def move(self, token: str, board_id: int, dx: int, dy: int) -> Optional[Board]:
         # TODO: Returns board??
-        return self.api.bots_move(
-             token, BotHandler._get_direction(dx, dy)
-        )
+        return self.api.bots_move(token, BotHandler._get_direction(dx, dy))
 
-    def register(self, name: str, email: str, password: str, team: str) -> Optional[Bot]:
+    def register(
+        self, name: str, email: str, password: str, team: str
+    ) -> Optional[Bot]:
         return self.api.bots_register(name, email, password, team)
+
+    def recover(self, email: str, password: str) -> Optional[str]:
+        return self.api.bots_recover(email, password)

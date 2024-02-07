@@ -12,7 +12,8 @@ from game.logic.random_diamond import RandomDiamondLogic
 from game.util import *
 
 init()
-BASE_URL = "http://localhost:8081/api"
+BASE_URL = "http://localhost:3000/api"
+DEFAULT_BOARD_ID = 1
 CONTROLLERS = {
     "Random": RandomLogic,
     "FirstDiamond": FirstDiamondLogic,
@@ -37,7 +38,9 @@ parser.add_argument(
     "--password", help="The password of the bot to register", action="store"
 )
 parser.add_argument("--team", help="The team of the bot to register", action="store")
-parser.add_argument("--board", help="Id of the board to join", action="store")
+parser.add_argument(
+    "--board", help="Id of the board to join", default=DEFAULT_BOARD_ID, action="store"
+)
 parser.add_argument(
     "--time-factor",
     help="A factor to multiply each move command with. If you want to run the bot in a slower mode e.g. use --time-factor=5 to multiply each delay with 5.",
@@ -68,18 +71,29 @@ board_handler = BoardHandler(api)
 #
 ###############################################################################
 if not args.token:
-    bot = bot_handler.register(args.name, args.email, args.password, args.team)
-    if bot:
-        print("")
-        print(
-            Style.BRIGHT + "Bot registered. Token: {}".format(bot.id) + Style.RESET_ALL
-        )
-        args.token = bot.id
-        with open(".token-" + bot.name, "w") as f:
-            f.write(bot.id)
-    else:
-        print("Unable to register bot")
-    exit(1)
+    recovered_token = bot_handler.recover(args.email, args.password)
+    args.token = recovered_token
+    if not recovered_token:
+        bot = bot_handler.register(args.name, args.email, args.password, args.team)
+        if bot:
+            print("")
+            print(
+                Style.BRIGHT
+                + "Bot registered. Token: {}".format(bot.id)
+                + Style.RESET_ALL
+            )
+            args.token = bot.id
+            # with open(".token-" + bot.name, "w") as f:
+            #     f.write(bot.id)
+        else:
+            print(
+                Fore.RED
+                + Style.BRIGHT
+                + "Error: "
+                + Style.RESET_ALL
+                + "Unable to register bot"
+            )
+            exit(1)
 
 ###############################################################################
 #
@@ -96,7 +110,7 @@ if logic_controller not in CONTROLLERS:
 if not bot.name:
     print("Bot does not exist.")
     exit(1)
-print("Welcome back", bot.name)
+print(Fore.BLUE + Style.BRIGHT + "Welcome back, " + Style.RESET_ALL + bot.name)
 
 # Setup variables
 logic_class = CONTROLLERS[logic_controller]
@@ -155,10 +169,13 @@ while True:
         break
 
     # Calculate next move
-    # delta_x, delta_y = bot_logic.next_move(board_bot, board)
-    delta_x, delta_y = (1, 0)
+    delta_x, delta_y = bot_logic.next_move(board_bot, board)
+    # delta_x, delta_y = (1, 0)
     if not board.is_valid_move(board_bot.position, delta_x, delta_y):
-        print("Warn: Invalid move will be ignored")
+        print(
+            Fore.YELLOW + Style.BRIGHT + "Warn:" + Style.RESET_ALL,
+            "Invalid move will be ignored." + f" Your move: ({delta_x}, {delta_y})",
+        )
         sleep(1)
         continue
 

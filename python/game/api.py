@@ -89,6 +89,18 @@ class Api:
             return from_dict(Board, resp)
         return None
 
+    def bots_recover(self, email: str, password: str) -> Optional[str]:
+        try:
+            response = self._req(
+                "/bots/recover", "post", {"email": email, "password": password}
+            )
+            resp, status = self._return_response_and_status(response)
+            if status == 201:
+                return resp["id"]
+            return None
+        except:
+            return None
+
     def _return_response_and_status(
         self, response: Response
     ) -> Tuple[Union[dict, List], int]:

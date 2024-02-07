@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Optional, Union
+from colorama import Fore, Style
 
 
 @dataclass
@@ -85,15 +86,31 @@ class Board:
         self, current_position: Position, delta_x: int, delta_y: int
     ) -> bool:
         if not (-1 <= delta_x <= 1) or not (-1 <= delta_y <= 1):
+            print(
+                Fore.RED + Style.BRIGHT + "Invalid move:" + Style.RESET_ALL,
+                "Delta values must be between -1 and 1 inclusive.",
+            )
             return False
 
         if delta_x == delta_y:
+            print(
+                Fore.RED + Style.BRIGHT + "Invalid move:" + Style.RESET_ALL,
+                "Delta_x and delta_y cannot be equal.",
+            )
             return False
 
         if not (0 <= current_position.x + delta_x < self.width):
+            print(
+                Fore.RED + Style.BRIGHT + "Invalid move:" + Style.RESET_ALL,
+                "X-coordinate out of bounds.",
+            )
             return False
 
         if not (0 <= current_position.y + delta_y < self.height):
+            print(
+                Fore.RED + Style.BRIGHT + "Invalid move:" + Style.RESET_ALL,
+                "Y-coordinate out of bounds.",
+            )
             return False
 
         return True
