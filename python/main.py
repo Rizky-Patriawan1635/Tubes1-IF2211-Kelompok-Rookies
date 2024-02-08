@@ -1,23 +1,19 @@
 import argparse
-import sys
 from time import sleep
 
 from colorama import Back, Fore, Style, init
 from game.api import Api
 from game.board_handler import BoardHandler
 from game.bot_handler import BotHandler
-from game.logic.first_diamond import FirstDiamondLogic
 from game.logic.random import RandomLogic
-from game.logic.random_diamond import RandomDiamondLogic
 from game.util import *
+from game.logic.base import BaseLogic
 
 init()
 BASE_URL = "http://localhost:3000/api"
 DEFAULT_BOARD_ID = 1
 CONTROLLERS = {
     "Random": RandomLogic,
-    "FirstDiamond": FirstDiamondLogic,
-    "RandomDiamond": RandomDiamondLogic,
 }
 
 ###############################################################################
@@ -83,8 +79,6 @@ if not args.token:
                 + Style.RESET_ALL
             )
             args.token = bot.id
-            # with open(".token-" + bot.name, "w") as f:
-            #     f.write(bot.id)
         else:
             print(
                 Fore.RED
@@ -100,21 +94,26 @@ if not args.token:
 # Setup bot using token and play game
 #
 ###############################################################################
-# TODO: Get bot
 bot = bot_handler.get_my_info(args.token)
 logic_controller = args.logic
 if logic_controller not in CONTROLLERS:
-    print("Invalid logic controller.")
+    print(
+        Fore.RED
+        + Style.BRIGHT
+        + "Error: "
+        + Style.RESET_ALL
+        + "Invalid logic controller"
+    )
     exit(1)
 
 if not bot.name:
-    print("Bot does not exist.")
+    print(Fore.RED + Style.BRIGHT + "Error: " + Style.RESET_ALL + "Bot does not exist")
     exit(1)
 print(Fore.BLUE + Style.BRIGHT + "Welcome back, " + Style.RESET_ALL + bot.name)
 
 # Setup variables
 logic_class = CONTROLLERS[logic_controller]
-bot_logic = logic_class()
+bot_logic: BaseLogic = logic_class()
 
 ###############################################################################
 #
@@ -145,7 +144,13 @@ else:
 
 # Did we manage to join a board?
 if not current_board_id:
-    print("Unable to find any boards to join")
+    print(
+        Fore.RED
+        + Style.BRIGHT
+        + "Error: "
+        + Style.RESET_ALL
+        + "Unable to find any boards to join"
+    )
     exit(1)
 
 ###############################################################################
@@ -183,7 +188,6 @@ while True:
         # Try to perform move
         board = bot_handler.move(bot.id, current_board_id, delta_x, delta_y)
     except Exception as e:
-        print(e)
         break
 
     if not board:
@@ -206,4 +210,4 @@ while True:
 # Game over!
 #
 ###############################################################################
-print("Game over!")
+print(Fore.BLUE + Style.BRIGHT + "Game over!" + Style.RESET_ALL)
