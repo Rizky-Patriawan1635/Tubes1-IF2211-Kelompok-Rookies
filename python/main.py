@@ -179,7 +179,8 @@ while True:
     if not board.is_valid_move(board_bot.position, delta_x, delta_y):
         print(
             Fore.YELLOW + Style.BRIGHT + "Warn:" + Style.RESET_ALL,
-            "Invalid move will be ignored." + f" Your move: ({delta_x}, {delta_y})",
+            "Invalid move will be ignored."
+            + f" Your move: ({delta_x}, {delta_y}). Your position: ({board_bot.position.x}, {board_bot.position.y})",
         )
         sleep(1)
         continue
