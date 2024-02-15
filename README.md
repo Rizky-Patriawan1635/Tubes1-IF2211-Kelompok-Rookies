@@ -31,7 +31,8 @@ Diamonds is a programming challenge. Program a bot and compete to get the highes
     ```
 
 2. To run multiple bots simultaneously
-   For Windows
+
+    For Windows
 
     ```
     ./run-bots.bat
