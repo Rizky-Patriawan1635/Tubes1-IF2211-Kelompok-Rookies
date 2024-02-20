@@ -41,12 +41,17 @@ Diamonds is a programming challenge. Program a bot and compete to get the highes
     For Linux / (possibly) macOS
 
     ```
-    ./run-bots/sh
+    ./run-bots.sh
+    ```
+
+    <b>Before executing the script, make sure to change the permission of the shell script to enable executing the script (for linux/macOS)</b>
+
+    ```
+    chmod +x run-bots.sh
     ```
 
 #### Note:
 
--   For Linux/macOS, make sure to change the permission of the shell script to enable executing the script
 -   If you run multiple bots, make sure each emails and names are unique
 -   The email could be anything as long as it follows a correct email syntax
 -   The name, and password could be anything without any space
