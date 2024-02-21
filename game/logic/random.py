@@ -17,7 +17,7 @@ class RandomLogic(BaseLogic):
         # Analyze new state
         if props.diamonds == 5:
             # Move to base
-            base = board_bot.base
+            base = board_bot.properties.base
             self.goal_position = base
         else:
             # Just roam around
