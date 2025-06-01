@@ -29,7 +29,12 @@ Diamonds is a programming challenge. Program a bot and compete to get the highes
     ```
     python main.py --logic Random --email=your_email@example.com --name=your_name --password=your_password --team etimo
     ```
+2. Run our bot
+   ```
+    python main.py --logic MyBot --email=Rookies@example.com --name=Rookies --password=123455 --team etimo
+    ```
 
+   
 2. To run multiple bots simultaneously
 
     For Windows
